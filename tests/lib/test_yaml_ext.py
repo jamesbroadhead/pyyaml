@@ -25,21 +25,21 @@ old_compose_all = yaml.compose_all
 def new_compose_all(stream, Loader=yaml.CLoader):
     return old_compose_all(stream, Loader)
 
-old_load = yaml.load
-def new_load(stream, Loader=yaml.CLoader):
-    return old_load(stream, Loader)
+old_unsafe_load = yaml.unsafe_load
+def new_unsafe_load(stream, Loader=yaml.CLoader):
+    return old_unsafe_load(stream, Loader)
 
-old_load_all = yaml.load_all
-def new_load_all(stream, Loader=yaml.CLoader):
-    return old_load_all(stream, Loader)
+old_unsafe_load_all = yaml.unsafe_load_all
+def new_unsafe_load_all(stream, Loader=yaml.CLoader):
+    return old_unsafe_load_all(stream, Loader)
 
 old_safe_load = yaml.safe_load
 def new_safe_load(stream):
-    return old_load(stream, yaml.CSafeLoader)
+    return old_unsafe_load(stream, yaml.CSafeLoader)
 
 old_safe_load_all = yaml.safe_load_all
 def new_safe_load_all(stream):
-    return old_load_all(stream, yaml.CSafeLoader)
+    return old_unsafe_load_all(stream, yaml.CSafeLoader)
 
 old_emit = yaml.emit
 def new_emit(events, stream=None, Dumper=yaml.CDumper, **kwds):
@@ -80,8 +80,10 @@ def _set_up():
     yaml.parse = new_parse
     yaml.compose = new_compose
     yaml.compose_all = new_compose_all
-    yaml.load = new_load
-    yaml.load_all = new_load_all
+    yaml.unsafe_load = new_unsafe_load
+    yaml.unsafe_load_all = new_unsafe_load_all
+    yaml.load = new_unsafe_load
+    yaml.load_all = new_unsafe_load_all
     yaml.safe_load = new_safe_load
     yaml.safe_load_all = new_safe_load_all
     yaml.emit = new_emit
@@ -103,8 +105,10 @@ def _tear_down():
     yaml.parse = old_parse
     yaml.compose = old_compose
     yaml.compose_all = old_compose_all
-    yaml.load = old_load
-    yaml.load_all = old_load_all
+    yaml.unsafe_load = old_unsafe_load
+    yaml.unsafe_load_all = old_unsafe_load_all
+    yaml.load = old_unsafe_load
+    yaml.load_all = old_unsafe_load_all
     yaml.safe_load = old_safe_load
     yaml.safe_load_all = old_safe_load_all
     yaml.emit = old_emit
