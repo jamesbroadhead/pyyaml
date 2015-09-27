@@ -45,7 +45,7 @@ def _make_objects():
     yaml.add_representer(MyTestClass1, represent1, Dumper=MyDumper)
 
     class MyTestClass2(MyTestClass1, yaml.YAMLObject):
-        yaml_loader = MyLoader
+        yaml.loader = MyLoader
         yaml_dumper = MyDumper
         yaml_tag = "!tag2"
         def from_yaml(cls, constructor, node):
@@ -71,7 +71,7 @@ def _make_objects():
         to_yaml = classmethod(to_yaml)
 
     class YAMLObject1(yaml.YAMLObject):
-        yaml_loader = MyLoader
+        yaml.loader = MyLoader
         yaml_dumper = MyDumper
         yaml_tag = '!foo'
         def __init__(self, my_parameter=None, my_another_parameter=None):
@@ -84,7 +84,7 @@ def _make_objects():
                 return False
 
     class YAMLObject2(yaml.YAMLObject):
-        yaml_loader = MyLoader
+        yaml.loader = MyLoader
         yaml_dumper = MyDumper
         yaml_tag = '!bar'
         def __init__(self, foo=1, bar=2, baz=3):
@@ -243,7 +243,7 @@ def test_constructor_types(data_filename, code_filename, verbose=False):
     native1 = None
     native2 = None
     try:
-        native1 = list(yaml.load_all(open(data_filename, 'rb'), Loader=MyLoader))
+        native1 = list(yaml.unsafe_load_all(open(data_filename, 'rb'), Loader=MyLoader))
         if len(native1) == 1:
             native1 = native1[0]
         native2 = _load_code(open(code_filename, 'rb').read())

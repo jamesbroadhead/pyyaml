@@ -12,7 +12,7 @@ def test_representer_types(code_filename, verbose=False):
             try:
                 output = yaml.dump(native1, Dumper=test_constructor.MyDumper,
                             allow_unicode=allow_unicode, encoding=encoding)
-                native2 = yaml.load(output, Loader=test_constructor.MyLoader)
+                native2 = yaml.unsafe_load(output, Loader=test_constructor.MyLoader)
                 try:
                     if native1 == native2:
                         continue

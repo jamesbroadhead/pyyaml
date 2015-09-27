@@ -169,8 +169,8 @@ def test_constructor(data_filename, canonical_filename, verbose=False):
     native1 = None
     native2 = None
     try:
-        native1 = list(yaml.load_all(open(data_filename, 'rb'), Loader=MyLoader))
-        native2 = list(yaml.load_all(open(canonical_filename, 'rb'), Loader=MyCanonicalLoader))
+        native1 = list(yaml.unsafe_load_all(open(data_filename, 'rb'), Loader=MyLoader))
+        native2 = list(yaml.unsafe_load_all(open(canonical_filename, 'rb'), Loader=MyCanonicalLoader))
         assert native1 == native2, (native1, native2)
     finally:
         if verbose:
