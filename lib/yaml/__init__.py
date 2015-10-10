@@ -1,4 +1,3 @@
-
 from error import *
 
 from tokens import *
@@ -8,13 +7,16 @@ from nodes import *
 from loader import *
 from dumper import *
 
-__version__ = '3.10'
+from deprecation import warn_if_kwarg_used
+
+__version__ = '3.11'
 
 try:
     from cyaml import *
     __with_libyaml__ = True
 except ImportError:
     __with_libyaml__ = False
+
 
 def scan(stream, Loader=Loader):
     """
@@ -61,7 +63,7 @@ def compose_all(stream, Loader=Loader):
     finally:
         loader.dispose()
 
-def load(stream, Loader=Loader):
+def unsafe_load(stream, Loader=Loader):
     """
     Parse the first YAML document in a stream
     and produce the corresponding Python object.
@@ -72,7 +74,7 @@ def load(stream, Loader=Loader):
     finally:
         loader.dispose()
 
-def load_all(stream, Loader=Loader):
+def unsafe_load_all(stream, Loader=Loader):
     """
     Parse all YAML documents in a stream
     and produce corresponding Python objects.
@@ -90,7 +92,7 @@ def safe_load(stream):
     and produce the corresponding Python object.
     Resolve only basic YAML tags.
     """
-    return load(stream, SafeLoader)
+    return unsafe_load(stream, SafeLoader)
 
 def safe_load_all(stream):
     """
@@ -98,7 +100,15 @@ def safe_load_all(stream):
     and produce corresponding Python objects.
     Resolve only basic YAML tags.
     """
-    return load_all(stream, SafeLoader)
+    return unsafe_load_all(stream, SafeLoader)
+
+def load(stream, **kwds):
+    kwds = warn_if_kwarg_used(kwds, 'Loader', Loader, 'load')
+    return unsafe_load(stream, **kwds)
+
+def load_all(stream, **kwds):
+    kwds = warn_if_kwarg_used(kwds, 'Loader', Loader, 'load_all')
+    return unsafe_load_all(stream, **kwds)
 
 def emit(events, stream=None, Dumper=Dumper,
         canonical=None, indent=None, width=None,
@@ -160,7 +170,7 @@ def serialize(node, stream=None, Dumper=Dumper, **kwds):
     """
     return serialize_all([node], stream, Dumper=Dumper, **kwds)
 
-def dump_all(documents, stream=None, Dumper=Dumper,
+def unsafe_dump_all(documents, stream=None, Dumper=Dumper,
         default_style=None, default_flow_style=None,
         canonical=None, indent=None, width=None,
         allow_unicode=None, line_break=None,
@@ -194,12 +204,12 @@ def dump_all(documents, stream=None, Dumper=Dumper,
     if getvalue:
         return getvalue()
 
-def dump(data, stream=None, Dumper=Dumper, **kwds):
+def unsafe_dump(data, stream=None, Dumper=Dumper, **kwds):
     """
     Serialize a Python object into a YAML stream.
     If stream is None, return the produced string instead.
     """
-    return dump_all([data], stream, Dumper=Dumper, **kwds)
+    return unsafe_dump_all([data], stream, Dumper=Dumper, **kwds)
 
 def safe_dump_all(documents, stream=None, **kwds):
     """
@@ -207,7 +217,7 @@ def safe_dump_all(documents, stream=None, **kwds):
     Produce only basic YAML tags.
     If stream is None, return the produced string instead.
     """
-    return dump_all(documents, stream, Dumper=SafeDumper, **kwds)
+    return unsafe_dump_all(documents, stream, Dumper=SafeDumper, **kwds)
 
 def safe_dump(data, stream=None, **kwds):
     """
@@ -215,7 +225,15 @@ def safe_dump(data, stream=None, **kwds):
     Produce only basic YAML tags.
     If stream is None, return the produced string instead.
     """
-    return dump_all([data], stream, Dumper=SafeDumper, **kwds)
+    return unsafe_dump_all([data], stream, Dumper=SafeDumper, **kwds)
+
+def dump_all(documents, **kwds):
+    kwds = warn_if_kwarg_used(kwds, 'Dumper', Dumper, 'dump_all')
+    return unsafe_dump_all(documents, **kwds)
+
+def dump(data, **kwds):
+    kwds = warn_if_kwarg_used(kwds, 'Dumper', Dumper, 'dump')
+    return unsafe_dump(data, **kwds)
 
 def add_implicit_resolver(tag, regexp, first=None,
         Loader=Loader, Dumper=Dumper):
