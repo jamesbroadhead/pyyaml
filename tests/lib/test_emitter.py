@@ -86,7 +86,7 @@ class EventsLoader(yaml.Loader):
 EventsLoader.add_constructor(None, EventsLoader.construct_event)
 
 def test_emitter_events(events_filename, verbose=False):
-    events = list(yaml.load(open(events_filename, 'rb'), Loader=EventsLoader))
+    events = list(yaml.unsafe_load(open(events_filename, 'rb'), Loader=EventsLoader))
     output = yaml.emit(events)
     if verbose:
         print "OUTPUT:"

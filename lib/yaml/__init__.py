@@ -227,7 +227,12 @@ def safe_dump(data, stream=None, **kwds):
     """
     return unsafe_dump_all([data], stream, Dumper=SafeDumper, **kwds)
 
-def dump_all(documents, **kwds):
+def dump_all(documents, stream=None, Dumper=Dumper,
+        default_style=None, default_flow_style=None,
+        canonical=None, indent=None, width=None,
+        allow_unicode=None, line_break=None,
+        encoding='utf-8', explicit_start=None, explicit_end=None,
+        version=None, tags=None):
     kwds = warn_if_kwarg_used(kwds, 'Dumper', Dumper, 'dump_all')
     return unsafe_dump_all(documents, **kwds)
 
