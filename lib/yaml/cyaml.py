@@ -5,11 +5,11 @@ __all__ = ['CBaseLoader', 'CSafeLoader', 'CUnsafeLoader', 'CLoader',
 from _yaml import CParser, CEmitter
 
 from constructor import *
-
-from serializer import *
 from representer import *
-
 from resolver import *
+from serializer import *
+
+from deprecation import warn_if_instantiated
 
 class CBaseLoader(CParser, BaseConstructor, BaseResolver):
 

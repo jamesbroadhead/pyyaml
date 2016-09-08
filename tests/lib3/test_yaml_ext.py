@@ -4,9 +4,11 @@ import types, pprint
 
 yaml.PyBaseLoader = yaml.BaseLoader
 yaml.PySafeLoader = yaml.SafeLoader
+yaml.PyUnsafeLoader = yaml.UnsafeLoader
 yaml.PyLoader = yaml.UnsafeLoader
 yaml.PyBaseDumper = yaml.BaseDumper
 yaml.PySafeDumper = yaml.SafeDumper
+yaml.PyUnsafeDumper = yaml.UnsafeDumper
 yaml.PyDumper = yaml.Dumper
 
 old_scan = yaml.scan

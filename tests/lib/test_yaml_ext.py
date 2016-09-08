@@ -4,9 +4,11 @@ import types, pprint
 
 yaml.PyBaseLoader = yaml.BaseLoader
 yaml.PySafeLoader = yaml.SafeLoader
+yaml.PyUnsafeLoader = yaml.UnsafeLoader
 yaml.PyLoader = yaml.UnsafeLoader
 yaml.PyBaseDumper = yaml.BaseDumper
 yaml.PySafeDumper = yaml.SafeDumper
+yaml.PyUnsafeDumper = yaml.UnsafeDumper
 yaml.PyDumper = yaml.Dumper
 
 old_scan = yaml.scan
@@ -69,6 +71,14 @@ old_safe_dump_all = yaml.safe_dump_all
 def new_safe_dump_all(documents, stream=None, **kwds):
     return old_unsafe_dump_all(documents, stream, yaml.CSafeDumper, **kwds)
 
+old_unsafe_dump = yaml.unsafe_dump
+def new_unsafe_dump(data, stream=None, **kwds):
+    return old_unsafe_dump(data, stream, Dumper=yaml.CUnsafeDumper, **kwds)
+
+old_unsafe_dump_all = yaml.unsafe_dump_all
+def new_unsafe_dump_all(documents, stream=None, **kwds):
+    return old_unsafe_dump_all(documents, stream, yaml.CUnsafeDumper, **kwds)
+
 def _set_up():
     yaml.BaseLoader = yaml.CBaseLoader
     yaml.SafeLoader = yaml.CSafeLoader
@@ -120,8 +130,8 @@ def _tear_down():
     yaml.emit = old_emit
     yaml.serialize = old_serialize
     yaml.serialize_all = old_serialize_all
-    yaml.dump = old_dump
-    yaml.dump_all = old_dump_all
+    yaml.dump = old_unsafe_dump
+    yaml.dump_all = old_unsafe_dump_all
     yaml.safe_dump = old_safe_dump
     yaml.safe_dump_all = old_safe_dump_all
     yaml.unsafe_dump = old_unsafe_dump
